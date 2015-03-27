@@ -100,7 +100,7 @@
         // checking cell type
         if ([chosenCellState isEqualToString:@"figure"] == YES) {
             
-                //get the figure in order to analyze (first - by color, then - by type for possibØe turns array)
+                //get the figure in order to analyze (first - by color, then - by type for possible turns array)
                 currentFigure = [self getFigureAtTag:(int)currentTag];
                 currentFigureColor = [[NSString alloc] initWithString:[currentFigure listColor]];
                 currentFigureType = [[NSString alloc] initWithString:[currentFigure listName]];
