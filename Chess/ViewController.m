@@ -112,8 +112,8 @@
                 if ([currentFigureColor isEqualToString:playerTurn] == YES) {
                     NSLog(@"Current figure coordinates are: {%i; %i}",[currentFigure x],[currentFigure y]);
                 
-                    // checking for possible moves (so far without considering other figures on the board, time to change it, boys!)
-                    possibleFigureMoves = [self getPossibleTurnCoordsForFigure:currentFigure color:[currentFigure listColor]];
+                    // checking for possible moves
+                    possibleFigureMoves = [self getPossibleTurnCoordsForFigure:currentFigure];
                     for (unsigned long i = 0;i < [possibleFigureMoves count];i++) {
                         NSLog(@"possibleFigureMoves: %lu: x:%i, y:%i",i+1,[(myXYPoint*)possibleFigureMoves[i] x], [(myXYPoint*)possibleFigureMoves[i] y]);
                     }
@@ -696,8 +696,9 @@
     return NO;
 }
 
--(NSMutableArray*)getPossibleTurnCoordsForFigure:(Figure *)currentFigure color:(NSString *)currentFigureColor
+-(NSMutableArray*)getPossibleTurnCoordsForFigure:(Figure *)currentFigure
 {
+    NSString *currentFigureColor = [currentFigure listColor];
     [self updateFigurePositions];
     //for (int i=0;i<16;i++) {
     //    NSLog(@"%i. white: %i;%i, black: %i;%i",i+1,[(myXYPoint*)figurePositionsWhite[i] x],[(myXYPoint*)figurePositionsWhite[i] y], [(myXYPoint*)figurePositionsBlack[i] x], [(myXYPoint*)figurePositionsBlack[i] y]);
@@ -707,7 +708,7 @@
     int currentY = [currentFigure y];
     
     if ([[currentFigure listName] isEqualToString:@"Pawn"] == YES) {
-        NSLog(@"calculating possible moves for pawn"); //don't forget to delete
+    //    NSLog(@"calculating possible moves for pawn"); //don't forget to delete
         [self getPossibleTurnCoordsForPawn:currentFigureColor array:coordsForFigureMoves x:currentX y:currentY];
     }
     else if ([[currentFigure listName] isEqualToString:@"Rook"] == YES) {

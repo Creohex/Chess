@@ -37,7 +37,7 @@
 - (NSString*)getCellStateAtTag:(long)currentTag;
 - (Figure*)getFigureAtTag:(int)currentTag;
 - (Figure*)getFigureAtCoords:(int)x andY:(int)y;
-- (NSMutableArray*)getPossibleTurnCoordsForFigure:(Figure*)currentFigure color:(NSString*)currentFigureColor;
+- (NSMutableArray*)getPossibleTurnCoordsForFigure:(Figure*)currentFigure;
 - (void)getPossibleTurnCoordsForPawn:(NSString*)currentFigureColor array:(NSMutableArray*)currentArray x:(int)currentX y:(int)currentY;
 - (BOOL)getPossibleTurnCoordsAssistFunc:(NSString*)currentFigureColor array:(NSMutableArray*)currentArray xyObj:(myXYPoint*)tempXYCoords figureType:(NSString*)type;
 - (void)getPossibleTurnCoordsForRook:(NSString*)currentFigureColor array:(NSMutableArray*)currentArray x:(int)currentX y:(int)currentY;
@@ -51,7 +51,6 @@
 - (void)updateFigurePositions;
 - (BOOL)arrayDoesContainCoord:(myXYPoint*)coord inArray:(NSMutableArray*)positionsArray;
 - (void)showPossibleFigureMovesFromArray:(NSArray*)arrayWithPossibleMoves;
-
 
 @end
 
