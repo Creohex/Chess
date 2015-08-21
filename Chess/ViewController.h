@@ -53,4 +53,3 @@
 - (void)showPossibleFigureMovesFromArray:(NSArray*)arrayWithPossibleMoves;
 
 @end
-
