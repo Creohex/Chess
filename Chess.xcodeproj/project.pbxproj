@@ -45,6 +45,8 @@
 		849C73C71A279B5B0022882F /* RookBlackChecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 849C73BB1A279B5B0022882F /* RookBlackChecked.png */; };
 		849C73C81A279B5B0022882F /* RookChecked.png in Resources */ = {isa = PBXBuildFile; fileRef = 849C73BC1A279B5B0022882F /* RookChecked.png */; };
 		84A225831A1BEE3F00CC99EB /* Logo120.png in Resources */ = {isa = PBXBuildFile; fileRef = 84A225821A1BEE3F00CC99EB /* Logo120.png */; };
+		8AED816E1B88DF11004A1059 /* KingBlackCheckedRed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AED816C1B88DF11004A1059 /* KingBlackCheckedRed.png */; };
+		8AED816F1B88DF11004A1059 /* KingCheckedRed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AED816D1B88DF11004A1059 /* KingCheckedRed.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,8 @@
 		849C73BB1A279B5B0022882F /* RookBlackChecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RookBlackChecked.png; sourceTree = "<group>"; };
 		849C73BC1A279B5B0022882F /* RookChecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RookChecked.png; sourceTree = "<group>"; };
 		84A225821A1BEE3F00CC99EB /* Logo120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo120.png; sourceTree = "<group>"; };
+		8AED816C1B88DF11004A1059 /* KingBlackCheckedRed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = KingBlackCheckedRed.png; sourceTree = "<group>"; };
+		8AED816D1B88DF11004A1059 /* KingCheckedRed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = KingCheckedRed.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +211,8 @@
 		842171481A1A2E73003271BA /* Chess_pics */ = {
 			isa = PBXGroup;
 			children = (
+				8AED816C1B88DF11004A1059 /* KingBlackCheckedRed.png */,
+				8AED816D1B88DF11004A1059 /* KingCheckedRed.png */,
 				849C73B11A279B5B0022882F /* KingChecked.png */,
 				849C73B21A279B5B0022882F /* BishopBlackChecked.png */,
 				849C73B31A279B5B0022882F /* BishopChecked.png */,
@@ -328,6 +334,7 @@
 				849C73BF1A279B5B0022882F /* BishopChecked.png in Resources */,
 				842171591A1A2E73003271BA /* Knight.png in Resources */,
 				842171681A1A5F6B003271BA /* LoadScreen.png in Resources */,
+				8AED816F1B88DF11004A1059 /* KingCheckedRed.png in Resources */,
 				849C73C21A279B5B0022882F /* KnightChecked.png in Resources */,
 				8421715A1A1A2E73003271BA /* KnightBlack.png in Resources */,
 				849C73C71A279B5B0022882F /* RookBlackChecked.png in Resources */,
@@ -337,6 +344,7 @@
 				849C73C01A279B5B0022882F /* KingBlackChecked.png in Resources */,
 				849C73C51A279B5B0022882F /* QueenBlackChecked.png in Resources */,
 				840468791A17A02A0048602F /* LaunchScreen.xib in Resources */,
+				8AED816E1B88DF11004A1059 /* KingBlackCheckedRed.png in Resources */,
 				8421715D1A1A2E73003271BA /* Queen.png in Resources */,
 				849C73A61A2729D10022882F /* EmptyCellChecked.png in Resources */,
 				849C73C31A279B5B0022882F /* PawnBlackChecked.png in Resources */,

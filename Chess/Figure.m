@@ -27,8 +27,7 @@
         [tempInstance setTag:tempTag];
         [tempInstance setColor:color];
 
-        
-        NSLog(@"Figure created: x:%i, y:%i, type: %@ %@, tag:%i",x, y, [tempInstance color], [tempInstance listName],tempTag);
+        //NSLog(@"Figure created: x:%i, y:%i, type: %@ %@, tag:%i",x, y, [tempInstance color], [tempInstance listName],tempTag);
     }
     return tempInstance;
 }

@@ -27,7 +27,7 @@
     }
     NSLog(@"_______Actual figure positions_______");
     for (int i=0;i<16;i++) {                            //32
-        NSLog(@"%i. %@ %@: {%i;%i}, %@ %@: {%i;%i}",i+1,[(Figure*)figures[i] listColor], [(Figure*)figures[i] listName], [(Figure*)figures[i] x], [(Figure*)figures[i] y],[(Figure*)figures[i+16] listColor], [(Figure*)figures[i+16] listName], [(Figure*)figures[i+16] x], [(Figure*)figures[i+16] y]);//
+        NSLog(@"%i. %@ %@: {%i;%i}, %@ %@: {%i;%i}",i+1,[(Figure*)figures[i] listColor], [(Figure*)figures[i] listName], [(Figure*)figures[i] x], [(Figure*)figures[i] y],[(Figure*)figures[i+16] listColor], [(Figure*)figures[i+16] listName], [(Figure*)figures[i+16] x], [(Figure*)figures[i+16] y]);
     }
 }
 
@@ -74,6 +74,7 @@
         [playerTurn setString:@"white"];
 
         myDisplay.text = @"White player turn";
+        imageTapTrigger = 0;
         //[mainButton setTitle:@"Restart" forState:UIControlStateNormal];
         //initializationTrigger = YES;
         NSLog(@"main init trigger = %i\n________________________________________________________",initializationTrigger);
@@ -88,6 +89,8 @@
     
     if (imageTapTrigger == 0) {
         long int thisTag = [(UITapGestureRecognizer*)sender view].tag;
+        NSLog(@"______________________");
+        NSLog(@" ");
         NSLog(@"image tapped, tag = %li",thisTag);
         NSString *chosenCellState = [[NSString alloc]  init];
         
@@ -133,6 +136,9 @@
                     // !! new stuff to implement: each time check for possible checkmate and deny a move by the player whose king hasn't switched to 'unchecked' (check-mate triggers for both kings?)
                     // one good way to check for kings being under attack: 'getPossibleTurnCoordsForFigure' parse through all enemy figures (0-15;16-32, considering a figure being dead of alive)
                     // ..and compare with allied king coords
+                    
+                    // ok, another idea of how to do this: each time, after (!) moving a figure (probably in another block) parse through all enemy positions and see if they attack your king. if they do - start some kind of counter ?
+                    
                 }
                 else if ([currentFigureColor isEqualToString:playerTurn] == NO) {
                     NSLog(@"This is %@ player turn, you can't use selected figure.",playerTurn);
@@ -167,17 +173,21 @@
                     // prepare variables/triggers for next turn of opposing player
                     imageTapTrigger = 0;
                     
+                    [self updateBoard];
+                    [self checkKings];
+                    
+                    if (imageTapTrigger ==  2) {
+                        break;
+                    }
+                    
                     if ([playerTurn isEqualToString:@"white"] == YES) {
                         [playerTurn setString:@"black"];
                         [myDisplay setText:@"Black player turn"];
-                    }
+                        }
                     else if ([playerTurn isEqualToString:@"black"] == YES) {
                         [playerTurn setString:@"white"];
                         [myDisplay setText:@"White player turn"];
                     }
-                    
-                    [self updateBoard];
-                    
                     break;
                 }
                 else if ([cellState isEqualToString:@"noFigure"] == YES) {
@@ -188,6 +198,13 @@
                     
                     imageTapTrigger = 0;
                     
+                    [self updateBoard];
+                    [self checkKings];
+                    
+                    if (imageTapTrigger == 2) {
+                        break;
+                    }
+                        
                     if ([playerTurn isEqualToString:@"white"] == YES) {
                         [playerTurn setString:@"black"];
                         [myDisplay setText:@"Black player turn"];
@@ -196,9 +213,6 @@
                         [playerTurn setString:@"white"];
                         [myDisplay setText:@"White player turn"];
                     }
-                    
-                    [self updateBoard];
-                    
                     break;
                 }
                 else {
@@ -211,12 +225,15 @@
             imageTapTrigger = 0;
             [self updateBoard];
         }
+        if (imageTapTrigger == 2) {
+            NSLog(@"Everything's finished, waiting for the game restart");
+        }
     }
 }
 
 -(void)showPossibleFigureMovesFromArray:(NSArray *)arrayWithPossibleMoves
 {
-    NSLog(@"Showing possible moves");
+    //NSLog(@"Showing possible moves");
     long currentTag;
     for (unsigned long i = 0;i<[arrayWithPossibleMoves count];i++) {
         Figure *currentFigure = [[Figure alloc]init];
@@ -303,14 +320,14 @@
     // nono, okay now! everyttting iz perfegt! yay Kappa
     
     if ([currentFigureColor isEqualToString:@"white"] == YES) {
-        NSLog(@"White Pawn under review");
+        //NSLog(@"White Pawn under review");
         [tempXYCoords setToX:(currentX) andY:(currentY + 1)];
         
         if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsWhite] == YES) {
-            NSLog(@"White figure ahead, can't go Y+1");
+            //NSLog(@"White figure ahead, can't go Y+1");
         }
         else if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsBlack] == YES) {
-            NSLog(@"Black figure ahead, can't go Y+1");
+            //NSLog(@"Black figure ahead, can't go Y+1");
         }
         else {
             [self addToPossibleTurnCoordsArray:currentArray XYobj:tempXYCoords];
@@ -321,14 +338,14 @@
         }
     }
     else if ([currentFigureColor isEqualToString:@"black"] == YES) {
-        NSLog(@"Black Pawn under review");
+        //NSLog(@"Black Pawn under review");
         [tempXYCoords setToX:(currentX) andY:(currentY - 1)];
         
         if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsBlack] == YES) {
-            NSLog(@"Black figure ahead, can't go Y-1");
+            //NSLog(@"Black figure ahead, can't go Y-1");
         }
         else if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsWhite] == YES) {
-            NSLog(@"White figure ahead, can't go Y-1");
+            //NSLog(@"White figure ahead, can't go Y-1");
         }
         else {
             [self addToPossibleTurnCoordsArray:currentArray XYobj:tempXYCoords];
@@ -365,11 +382,11 @@
 {
     if ([currentFigureColor isEqualToString:@"white"] == YES) {
         if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsWhite] == YES) {
-            NSLog(@"White %@ stumbled on another white figure, can't proceed further",type);
+            //NSLog(@"White %@ stumbled on another white figure, can't proceed further",type);
             return NO;
         }
         else if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsBlack] == YES) {
-            NSLog(@"White %@ is able to kill a black figure at %i;%i, no more moves further",type,[tempXYCoords x],[tempXYCoords y]);
+            //NSLog(@"White %@ is able to kill a black figure at %i;%i, no more moves further",type,[tempXYCoords x],[tempXYCoords y]);
             [self addToPossibleTurnCoordsArray:currentArray XYobj:tempXYCoords];
             return NO;
         }
@@ -379,11 +396,11 @@
     }
     else if ([currentFigureColor isEqualToString:@"black"] == YES) {
         if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsBlack] == YES) {
-            NSLog(@"Black %@ stumbled on another black figure, can't proceed further",type);
+            //NSLog(@"Black %@ stumbled on another black figure, can't proceed further",type);
             return NO;
         }
         else if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsWhite] == YES) {
-            NSLog(@"Black %@ is able to kill a white figure at %i;%i, no more moves further",type,[tempXYCoords x],[tempXYCoords y]);
+            //NSLog(@"Black %@ is able to kill a white figure at %i;%i, no more moves further",type,[tempXYCoords x],[tempXYCoords y]);
             [self addToPossibleTurnCoordsArray:currentArray XYobj:tempXYCoords];
             return NO;
         }
@@ -396,7 +413,7 @@
 
 - (void)getPossibleTurnCoordsForRook:(NSString*)currentFigureColor array:(NSMutableArray *)currentArray x:(int)currentX y:(int)currentY
 {
-    NSLog(@"Rook under review");
+    //NSLog(@"Rook under review");
     int helpfulInt;
 
     helpfulInt = currentY;
@@ -441,7 +458,7 @@
 {
     if ([currentFigureColor isEqualToString:@"white"] == YES) {
         if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsWhite] == YES) {
-            NSLog(@"White %@ can't go to point {%i;%i}, because there's a white figure",type,[tempXYCoords x],[tempXYCoords y]);
+            //NSLog(@"White %@ can't go to point {%i;%i}, because there's a white figure",type,[tempXYCoords x],[tempXYCoords y]);
         }
         else {
             [self addToPossibleTurnCoordsArray:currentArray XYobj:tempXYCoords];
@@ -449,7 +466,7 @@
     }
     else if ([currentFigureColor isEqualToString:@"black"] == YES) {
         if ([self arrayDoesContainCoord:tempXYCoords inArray:figurePositionsBlack] == YES) {
-            NSLog(@"Black %@ can't go to point {%i;%i}, because there's a black figure",type,[tempXYCoords x],[tempXYCoords y]);
+            //NSLog(@"Black %@ can't go to point {%i;%i}, because there's a black figure",type,[tempXYCoords x],[tempXYCoords y]);
         }
         else {
             [self addToPossibleTurnCoordsArray:currentArray XYobj:tempXYCoords];
@@ -459,7 +476,7 @@
 
 - (void)getPossibleTurnCoordsForKnight:(NSString*)currentFigureColor array:(NSMutableArray *)currentArray x:(int)currentX y:(int)currentY
 {
-    NSLog(@"%@ knight under review",currentFigureColor);
+    //NSLog(@"%@ knight under review",currentFigureColor);
     myXYPoint *tempXYCoords = [[myXYPoint alloc]init];
     
     [tempXYCoords setToX:currentX andY:currentY];
@@ -509,7 +526,7 @@
 
 - (void)getPossibleTurnCoordsForBishop:(NSString*)currentFigureColor array:(NSMutableArray *)currentArray x:(int)currentX y:(int)currentY
 {
-    NSLog(@"%@ bishop under review",currentFigureColor);
+    //NSLog(@"%@ bishop under review",currentFigureColor);
     int helpfulX,helpfulY;
     myXYPoint *tempXYCoords = [[myXYPoint alloc]init];
     [tempXYCoords setToX:currentX andY:currentY];
@@ -561,7 +578,7 @@
 
 - (void)getPossibleTurnCoordsForQueen:(NSString*)currentFigureColor array:(NSMutableArray *)currentArray x:(int)currentX y:(int)currentY
 {
-    NSLog(@"%@ queen under review",currentFigureColor);
+    //NSLog(@"%@ queen under review",currentFigureColor);
     int helpfulX,helpfulY;
     myXYPoint *tempXYCoords = [[myXYPoint alloc]init];
     [tempXYCoords setToX:currentX andY:currentY];
@@ -842,6 +859,8 @@
     }
     
     NSLog(@"Moved all figures to their starting positions!");
+    
+    [self updateFigurePositions]; //here just in case
 }
 
 -(int)convertCoordsToTag:(int)x y:(int)y
@@ -985,6 +1004,60 @@
     queenBlack = [Figure myInit:4 y:8 type:4 color:@"black"];
     king = [Figure myInit:5 y:1 type:5 color:@"white"];
     kingBlack = [Figure myInit:5 y:8 type:5 color:@"black"];
+}
+
+-(void)checkKings { // This function must ONLY be used after the player's turn!!
+    [self updateFigurePositions];
+    
+    // check white king
+    NSMutableArray *blackSidePossibleMoves = [[NSMutableArray alloc]init];
+    Figure *tempFig = [[Figure alloc]init];
+    for (int i=0;i<16;i++) {
+        tempFig = [self getFigureAtTag:[[figurePositionsBlack objectAtIndex:i] convertToTag]];
+        blackSidePossibleMoves = [self mergeArrays:blackSidePossibleMoves and:[self getPossibleTurnCoordsForFigure:tempFig]];
+    }
+    // compare all black possible moves with white king's position
+    myXYPoint *whiteKingPoint = [[myXYPoint alloc]init];
+    [whiteKingPoint setToX:[king x] andY:[king y]];
+
+    for (unsigned long i=0;i<[blackSidePossibleMoves count];i++) {
+        if ([king x] == [(myXYPoint*)blackSidePossibleMoves[i] x] && [king y] == [(myXYPoint*)blackSidePossibleMoves[i] y]) {
+            if ([playerTurn  isEqualToString: @"white"]) {
+                [(UIImageView*)cells[([whiteKingPoint convertToTag]-1)] setImage:[UIImage imageNamed:@"kingCheckedRed.png"]];
+                myDisplay.text = @"Black player wins!"; // need to find a way how to terminate session... (!)
+                NSLog(@"BLACK WON!!!");
+                imageTapTrigger = 2;
+            }
+        }
+    }
+
+    // check black king
+    NSMutableArray *whiteSidePossibleMoves = [[NSMutableArray alloc]init];
+    for (int i=0;i<16;i++) {
+        tempFig = [self getFigureAtTag:[[figurePositionsWhite objectAtIndex:i] convertToTag]];
+        whiteSidePossibleMoves = [self mergeArrays:whiteSidePossibleMoves and:[self getPossibleTurnCoordsForFigure:tempFig]];
+    }
+    // compare all white possible moves with black king's position
+    myXYPoint *blackKingPoint = [[myXYPoint alloc]init];
+    [blackKingPoint setToX:[kingBlack x] andY:[kingBlack y]];
+    
+    for (unsigned long i=0;i<[whiteSidePossibleMoves count];i++) {
+        if ([kingBlack x] == [(myXYPoint*)whiteSidePossibleMoves[i] x] && [kingBlack y] == [(myXYPoint*)whiteSidePossibleMoves[i] y]) {
+            if ([playerTurn isEqualToString: @"black"]) {
+                [(UIImageView*)cells[([blackKingPoint convertToTag]-1)] setImage:[UIImage imageNamed:@"kingBlackCheckedRed.png"]];
+                myDisplay.text = @"White player wins!"; // ...same thing applies...
+                NSLog(@"WHITE WON!!!");
+                imageTapTrigger = 2;
+            }
+        }
+    }
+}
+
+-(NSMutableArray*)mergeArrays:(NSMutableArray*)array1 and:(NSMutableArray*)array2 {
+    for (long int i=0;i<[array2 count];i++) {
+        [array1 addObject:[array2 objectAtIndex:i]];
+    }
+    return array1;
 }
 
 - (void)viewDidLoad {
