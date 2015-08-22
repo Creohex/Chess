@@ -51,5 +51,6 @@
 - (void)updateFigurePositions;
 - (BOOL)arrayDoesContainCoord:(myXYPoint*)coord inArray:(NSMutableArray*)positionsArray;
 - (void)showPossibleFigureMovesFromArray:(NSArray*)arrayWithPossibleMoves;
+- (void)checkKings;
 
 @end

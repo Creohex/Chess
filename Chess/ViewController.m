@@ -27,7 +27,7 @@
     }
     NSLog(@"_______Actual figure positions_______");
     for (int i=0;i<16;i++) {                            //32
-        NSLog(@"%i. %@ %@: {%i;%i}, %@ %@: {%i;%i}",i+1,[(Figure*)figures[i] listColor], [(Figure*)figures[i] listName], [(Figure*)figures[i] x], [(Figure*)figures[i] y],[(Figure*)figures[i+16] listColor], [(Figure*)figures[i+16] listName], [(Figure*)figures[i+16] x], [(Figure*)figures[i+16] y]);//
+        NSLog(@"%i. %@ %@: {%i;%i}, %@ %@: {%i;%i}",i+1,[(Figure*)figures[i] listColor], [(Figure*)figures[i] listName], [(Figure*)figures[i] x], [(Figure*)figures[i] y],[(Figure*)figures[i+16] listColor], [(Figure*)figures[i+16] listName], [(Figure*)figures[i+16] x], [(Figure*)figures[i+16] y]);
     }
 }
 
@@ -133,6 +133,9 @@
                     // !! new stuff to implement: each time check for possible checkmate and deny a move by the player whose king hasn't switched to 'unchecked' (check-mate triggers for both kings?)
                     // one good way to check for kings being under attack: 'getPossibleTurnCoordsForFigure' parse through all enemy figures (0-15;16-32, considering a figure being dead of alive)
                     // ..and compare with allied king coords
+                    
+                    // ok, another idea of how to do this: each time, after (!) moving a figure (probably in another block) parse through all enemy positions and see if they attack your king. if they do - start some kind of counter ?
+                    
                 }
                 else if ([currentFigureColor isEqualToString:playerTurn] == NO) {
                     NSLog(@"This is %@ player turn, you can't use selected figure.",playerTurn);
@@ -842,6 +845,8 @@
     }
     
     NSLog(@"Moved all figures to their starting positions!");
+    
+    [self updateFigurePositions]; //here just in case
 }
 
 -(int)convertCoordsToTag:(int)x y:(int)y
@@ -932,6 +937,7 @@
             NSLog(@"Not updating %@, because it's not alive",nameOfCurrentFigure);
         }
     }
+    [self checkKings];
     NSLog(@"Board updated");
 }
 
@@ -985,6 +991,46 @@
     queenBlack = [Figure myInit:4 y:8 type:4 color:@"black"];
     king = [Figure myInit:5 y:1 type:5 color:@"white"];
     kingBlack = [Figure myInit:5 y:8 type:5 color:@"black"];
+}
+
+-(void)checkKings { // This function must ONLY be used after the player's turn!!
+    [self updateFigurePositions];
+    
+    // check white king
+    NSMutableArray *blackSidePossibleMoves = [[NSMutableArray alloc]init];
+    Figure *tempFig = [[Figure alloc]init];
+    for (int i=0;i<16;i++) {
+        tempFig = [self getFigureAtTag:[[figurePositionsBlack objectAtIndex:i] convertToTag]];
+        [blackSidePossibleMoves addObject:[self getPossibleTurnCoordsForFigure:tempFig]];
+    }
+    // compare all black possible moves with white king's position
+    myXYPoint *whiteKingPoint = [[myXYPoint alloc]init];
+    [whiteKingPoint setToX:[king x] andY:[king y]];
+    //NSLog(@"whiteKingPoint created! tag: %i, x: %i, y: %i",[whiteKingPoint convertToTag],[whiteKingPoint x], [whiteKingPoint y]);
+    if ([self arrayDoesContainCoord:whiteKingPoint inArray:blackSidePossibleMoves]) {
+        if ([playerTurn  isEqualToString: @"white"]) {
+            [(UIImageView*)cells[([whiteKingPoint convertToTag])] setImage:[UIImage imageNamed:@"kingCheckedRed.png"]];
+            myDisplay.text = @"White player wins!"; // need to find a way how to terminate session... (!)
+            NSLog(@"WHITE WON!!!");
+        }
+    }
+    
+    // check black king
+    NSMutableArray *whiteSidePossibleMoves = [[NSMutableArray alloc]init];
+    for (int i=0;i<16;i++) {
+        tempFig = [self getFigureAtTag:[[figurePositionsWhite objectAtIndex:i] convertToTag]];
+        [whiteSidePossibleMoves addObject:[self getPossibleTurnCoordsForFigure:tempFig]];
+    }
+    // compare all white possible moves with black king's position
+    myXYPoint *blackKingPoint = [[myXYPoint alloc]init];
+    [blackKingPoint setToX:[kingBlack x] andY:[kingBlack y]];
+    if ([self arrayDoesContainCoord:blackKingPoint inArray:whiteSidePossibleMoves]) {
+        if ([playerTurn isEqualToString: @"black"]) {
+            [(UIImageView*)cells[([blackKingPoint convertToTag])] setImage:[UIImage imageNamed:@"kingBlackCheckedRed.png"]];
+            myDisplay.text = @"Black player wins!"; // ...same thing applies...
+            NSLog(@"Black WON!!!");
+        }
+    }
 }
 
 - (void)viewDidLoad {
