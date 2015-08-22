@@ -74,6 +74,7 @@
         [playerTurn setString:@"white"];
 
         myDisplay.text = @"White player turn";
+        imageTapTrigger = 0;
         //[mainButton setTitle:@"Restart" forState:UIControlStateNormal];
         //initializationTrigger = YES;
         NSLog(@"main init trigger = %i\n________________________________________________________",initializationTrigger);
@@ -173,6 +174,7 @@
                     imageTapTrigger = 0;
                     
                     [self updateBoard];
+                    [self checkKings];
                     
                     if ([playerTurn isEqualToString:@"white"] == YES) {
                         [playerTurn setString:@"black"];
@@ -194,6 +196,7 @@
                     imageTapTrigger = 0;
                     
                     [self updateBoard];
+                    [self checkKings];
                     
                     if ([playerTurn isEqualToString:@"white"] == YES) {
                         [playerTurn setString:@"black"];
@@ -215,6 +218,9 @@
             NSLog(@"Restarting this player's turn");
             imageTapTrigger = 0;
             [self updateBoard];
+        }
+        if (imageTapTrigger == 2) {
+            NSLog(@"Everything's finished, waiting for the game restart");
         }
     }
 }
@@ -939,7 +945,6 @@
             NSLog(@"Not updating %@, because it's not alive",nameOfCurrentFigure);
         }
     }
-    [self checkKings];
     NSLog(@"Board updated");
 }
 
@@ -1015,11 +1020,11 @@
                 [(UIImageView*)cells[([whiteKingPoint convertToTag]-1)] setImage:[UIImage imageNamed:@"kingCheckedRed.png"]];
                 myDisplay.text = @"Black player wins!"; // need to find a way how to terminate session... (!)
                 NSLog(@"BLACK WON!!!");
+                imageTapTrigger = 2;
             }
         }
     }
-    
-    
+
     // check black king
     NSMutableArray *whiteSidePossibleMoves = [[NSMutableArray alloc]init];
     for (int i=0;i<16;i++) {
@@ -1036,6 +1041,7 @@
                 [(UIImageView*)cells[([blackKingPoint convertToTag]-1)] setImage:[UIImage imageNamed:@"kingBlackCheckedRed.png"]];
                 myDisplay.text = @"White player wins!"; // ...same thing applies...
                 NSLog(@"WHITE WON!!!");
+                imageTapTrigger = 2;
             }
         }
     }
