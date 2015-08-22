@@ -52,5 +52,6 @@
 - (BOOL)arrayDoesContainCoord:(myXYPoint*)coord inArray:(NSMutableArray*)positionsArray;
 - (void)showPossibleFigureMovesFromArray:(NSArray*)arrayWithPossibleMoves;
 - (void)checkKings;
+- (NSMutableArray*)mergeArrays:(NSMutableArray*)array1 and:(NSMutableArray*)array2;
 
 @end
