@@ -176,15 +176,18 @@
                     [self updateBoard];
                     [self checkKings];
                     
+                    if (imageTapTrigger ==  2) {
+                        break;
+                    }
+                    
                     if ([playerTurn isEqualToString:@"white"] == YES) {
                         [playerTurn setString:@"black"];
                         [myDisplay setText:@"Black player turn"];
-                    }
+                        }
                     else if ([playerTurn isEqualToString:@"black"] == YES) {
                         [playerTurn setString:@"white"];
                         [myDisplay setText:@"White player turn"];
                     }
-                    
                     break;
                 }
                 else if ([cellState isEqualToString:@"noFigure"] == YES) {
@@ -198,6 +201,10 @@
                     [self updateBoard];
                     [self checkKings];
                     
+                    if (imageTapTrigger == 2) {
+                        break;
+                    }
+                        
                     if ([playerTurn isEqualToString:@"white"] == YES) {
                         [playerTurn setString:@"black"];
                         [myDisplay setText:@"Black player turn"];
@@ -206,7 +213,6 @@
                         [playerTurn setString:@"white"];
                         [myDisplay setText:@"White player turn"];
                     }
-
                     break;
                 }
                 else {
