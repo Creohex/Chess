@@ -17,7 +17,7 @@
 
 @implementation ViewController
 
-@synthesize myDisplay, ImageView1, ImageView2, ImageView3, ImageView4, ImageView5, ImageView6, ImageView7, ImageView8, ImageView9, ImageView10, ImageView11, ImageView12, ImageView13, ImageView14, ImageView15, ImageView16, ImageView17, ImageView18, ImageView19, ImageView20, ImageView21, ImageView22, ImageView23, ImageView24, ImageView25, ImageView26, ImageView27, ImageView28, ImageView29, ImageView30, ImageView31, ImageView32, ImageView33, ImageView34, ImageView35, ImageView36, ImageView37, ImageView38, ImageView39, ImageView40, ImageView41, ImageView42, ImageView43, ImageView44, ImageView45, ImageView46, ImageView47, ImageView48, ImageView49, ImageView50, ImageView51, ImageView52, ImageView53, ImageView54, ImageView55, ImageView56, ImageView57, ImageView58, ImageView59, ImageView60, ImageView61, ImageView62, ImageView63, ImageView64, pawn1, pawn2, pawn3, pawn4, pawn5, pawn6, pawn7, pawn8, pawnBlack1, pawnBlack2, pawnBlack3, pawnBlack4, pawnBlack5, pawnBlack6, pawnBlack7, pawnBlack8, rook1, rook2, rookBlack1, rookBlack2, knight1, knight2, knightBlack1, knightBlack2, bishop1, bishop2, bishopBlack1, bishopBlack2, queen, queenBlack, king, kingBlack, initializationTrigger,imageTapTrigger,cells,figures,gestureArray,mainButton,playerTurn,turnProgress, figurePositionsWhite, figurePositionsBlack, possibleFigureMoves,figureToMove;
+@synthesize myDisplay, ImageView1, ImageView2, ImageView3, ImageView4, ImageView5, ImageView6, ImageView7, ImageView8, ImageView9, ImageView10, ImageView11, ImageView12, ImageView13, ImageView14, ImageView15, ImageView16, ImageView17, ImageView18, ImageView19, ImageView20, ImageView21, ImageView22, ImageView23, ImageView24, ImageView25, ImageView26, ImageView27, ImageView28, ImageView29, ImageView30, ImageView31, ImageView32, ImageView33, ImageView34, ImageView35, ImageView36, ImageView37, ImageView38, ImageView39, ImageView40, ImageView41, ImageView42, ImageView43, ImageView44, ImageView45, ImageView46, ImageView47, ImageView48, ImageView49, ImageView50, ImageView51, ImageView52, ImageView53, ImageView54, ImageView55, ImageView56, ImageView57, ImageView58, ImageView59, ImageView60, ImageView61, ImageView62, ImageView63, ImageView64, pawn1, pawn2, pawn3, pawn4, pawn5, pawn6, pawn7, pawn8, pawnBlack1, pawnBlack2, pawnBlack3, pawnBlack4, pawnBlack5, pawnBlack6, pawnBlack7, pawnBlack8, rook1, rook2, rookBlack1, rookBlack2, knight1, knight2, knightBlack1, knightBlack2, bishop1, bishop2, bishopBlack1, bishopBlack2, queen, queenBlack, king, kingBlack, initializationTrigger,imageTapTrigger,cells,figures,gestureArray,mainButton,playerTurn,turnProgress, figurePositionsWhite, figurePositionsBlack, possibleFigureMoves,figureToMove, log;
 
 -(IBAction)DebugClick:(UIButton *)sender
 {
@@ -38,6 +38,7 @@
         // change button name
         [mainButton setTitle:@"Restart" forState:UIControlStateNormal];
         myDisplay.text = @"Let the game begin!";
+        log.text = @"Start";
         
         // imageView array
         cells = [self createImageViewArray];
@@ -72,6 +73,7 @@
         [self returnFiguresToBasicPositions];
         [self updateBoard];
         [playerTurn setString:@"white"];
+        log.text = @"Start";
 
         myDisplay.text = @"White player turn";
         imageTapTrigger = 0;
@@ -168,7 +170,8 @@
                     [figureAtTag kill];
                     
                     // move the killer to dead figure's place
-                    [figureToMove moveTo:[coordsOfFigureToKill x] y:[coordsOfFigureToKill y]];
+                    //[figureToMove moveTo:[coordsOfFigureToKill x] y:[coordsOfFigureToKill y]];
+                    [self moveFigureAndLogX:[coordsOfFigureToKill x] andY:[coordsOfFigureToKill y]];
                     
                     // prepare variables/triggers for next turn of opposing player
                     imageTapTrigger = 0;
@@ -194,7 +197,8 @@
                     
                     
                     myXYPoint *coordsOfCellToMoveTo = [myXYPoint myInitWithTag:(int)currentTag];
-                    [figureToMove moveTo:[coordsOfCellToMoveTo x] y:[coordsOfCellToMoveTo y]];
+                    //[figureToMove moveTo:[coordsOfCellToMoveTo x] y:[coordsOfCellToMoveTo y]];
+                    [self moveFigureAndLogX:[coordsOfCellToMoveTo x] andY:[coordsOfCellToMoveTo y]];
                     
                     imageTapTrigger = 0;
                     
@@ -1027,6 +1031,7 @@
                 myDisplay.text = @"Black player wins!"; // need to find a way how to terminate session... (!)
                 NSLog(@"BLACK WON!!!");
                 imageTapTrigger = 2;
+                log.text = [log.text stringByAppendingString:@"\rFinish"];
             }
         }
     }
@@ -1048,6 +1053,7 @@
                 myDisplay.text = @"White player wins!"; // ...same thing applies...
                 NSLog(@"WHITE WON!!!");
                 imageTapTrigger = 2;
+                log.text = [log.text stringByAppendingString:@"\rFinish"];
             }
         }
     }
@@ -1060,6 +1066,18 @@
     return array1;
 }
 
+- (void)logTurnWithCoordsX:(int)x andY:(int)y {
+    NSString* tempString = [NSString stringWithFormat:@"\r(%@ %@): [%i:%i] to [%i:%i]",[figureToMove listColor],[figureToMove listName],[figureToMove x],[figureToMove y],x,y];
+    log.text = [log.text stringByAppendingString:tempString];
+    NSRange range = NSMakeRange(log.text.length - 1, 1);
+    [log scrollRangeToVisible:range];
+}
+
+- (void) moveFigureAndLogX:(int)x andY:(int)y { //make a more suitable function name
+    [self logTurnWithCoordsX:x andY:y];
+    [figureToMove moveTo:x y:y];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -1068,6 +1086,7 @@
     imageTapTrigger = 0;
     playerTurn = [[NSMutableString alloc] initWithString:@"white"];
     turnProgress = 0;
+    log.editable = NO;
     NSLog(@"Initializations at 'viewDidLoad' completed");
 }
 
