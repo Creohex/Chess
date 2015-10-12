@@ -184,8 +184,7 @@
                     break;
                 }
                 else if ([cellState isEqualToString:@"noFigure"] == YES) {
-                    
-                    
+
                     myXYPoint *coordsOfCellToMoveTo = [myXYPoint myInitWithTag:(int)currentTag];
                     //[figureToMove moveTo:[coordsOfCellToMoveTo x] y:[coordsOfCellToMoveTo y]];
                     [self moveFigureAndLogX:[coordsOfCellToMoveTo x] andY:[coordsOfCellToMoveTo y]];
@@ -309,10 +308,7 @@
 {
     myXYPoint *tempXYCoords = [[myXYPoint alloc]init];
     [tempXYCoords setToX:currentX andY:currentY];
-    
-    // HOW TO ADD LOCAL OBJECTS TO ARRAY (STRONG COPY? OR WHAT?) NO NEED TO ADD 5 REFS OF THE SAME OBJECT TO ARRAY. POINTLESS :(((((((((((((((( FIX IT PLOX
-    // nono, okay now! everyttting iz perfegt! yay Kappa
-    
+
     if ([currentFigureColor isEqualToString:@"white"] == YES) {
         //NSLog(@"White Pawn under review");
         [tempXYCoords setToX:(currentX) andY:(currentY + 1)];
@@ -711,9 +707,7 @@
 {
     NSString *currentFigureColor = [currentFigure listColor];
     [self updateFigurePositions];
-    //for (int i=0;i<16;i++) {
-    //    NSLog(@"%i. white: %i;%i, black: %i;%i",i+1,[(myXYPoint*)figurePositionsWhite[i] x],[(myXYPoint*)figurePositionsWhite[i] y], [(myXYPoint*)figurePositionsBlack[i] x], [(myXYPoint*)figurePositionsBlack[i] y]);
-    //}
+
     NSMutableArray *coordsForFigureMoves = [[NSMutableArray alloc] init];
     int currentX = [currentFigure x];
     int currentY = [currentFigure y];
@@ -875,11 +869,8 @@
     [self clearCells];
     
     // assign tags based on coords
-    
-    
     // analyze figures and color of according cells and set images
     for (int i = 0;i < 32;i++) {
-        
         NSString *colorOfCurrentFigure = [figures[i] listColor];
         NSString *nameOfCurrentFigure = [figures[i] listName];
         int cellX = [(Figure*)figures[i] x];
@@ -890,7 +881,6 @@
         
         if (creatureIsAlive == YES) {
             if ([colorOfCurrentFigure isEqualToString:@"white"] == YES) {
-                
                 if ([nameOfCurrentFigure isEqualToString:@"Pawn"] == YES) {
                     [(UIImageView*)cells[cellToFill] setImage:[UIImage imageNamed:@"Pawn.png"]];
                 }
@@ -1000,7 +990,7 @@
     kingBlack = [Figure myInit:5 y:8 type:5 color:@"black"];
 }
 
--(void)checkKings { // This function must ONLY be used after the player's turn!!
+-(void)checkKings { // This function must ONLY be used after a player turn!!
     [self updateFigurePositions];
     
     // check white king
