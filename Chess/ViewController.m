@@ -131,16 +131,6 @@
                         imageTapTrigger = 1;
                         figureToMove = currentFigure;
                     }
-                
-                    // (done)after acquiring [a finished array of possible moves]-done yay!!, we should proceed
-                    // (done)..to part 2: moving the figure (if destination cell is empty - move, if occupied with enemy - kill and move
-                    // (done)more to come! ;o
-                    // !! new stuff to implement: each time check for possible checkmate and deny a move by the player whose king hasn't switched to 'unchecked' (check-mate triggers for both kings?)
-                    // one good way to check for kings being under attack: 'getPossibleTurnCoordsForFigure' parse through all enemy figures (0-15;16-32, considering a figure being dead of alive)
-                    // ..and compare with allied king coords
-                    
-                    // ok, another idea of how to do this: each time, after (!) moving a figure (probably in another block) parse through all enemy positions and see if they attack your king. if they do - start some kind of counter ?
-                    
                 }
                 else if ([currentFigureColor isEqualToString:playerTurn] == NO) {
                     NSLog(@"This is %@ player turn, you can't use selected figure.",playerTurn);
